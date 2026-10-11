@@ -1,9 +1,4 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// Widget test de plane — verifica la animación implícita del avión.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,20 +6,31 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:animated/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  testWidgets('el avión arranca abajo y el FAB muestra "Take Flight"',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.byIcon(Icons.airplanemode_active), findsNWidgets(2)); // FAB + child
+    expect(find.text('Take Flight'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    final animated = tester.widget<AnimatedContainer>(
+      find.byType(AnimatedContainer),
+    );
+    expect(animated.alignment, Alignment.bottomCenter);
+    expect(animated.duration, const Duration(seconds: 2));
+  });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  testWidgets('al tocar el FAB el avión vuela al centro',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+
+    await tester.tap(find.text('Take Flight'));
+    await tester.pump();                    // inicio de la animación
+    await tester.pump(const Duration(seconds: 2)); // animación completa
+
+    final animated = tester.widget<AnimatedContainer>(
+      find.byType(AnimatedContainer),
+    );
+    expect(animated.alignment, Alignment.center);
   });
 }

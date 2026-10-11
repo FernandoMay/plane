@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -12,16 +13,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
       ),
-      home: FlightExample(),
+      home: const FlightExample(),
     );
   }
 }
 
 class FlightExample extends StatefulWidget {
+  const FlightExample({super.key});
+
   @override
-  FlightExampleState createState() {
-    return new FlightExampleState();
-  }
+  FlightExampleState createState() => FlightExampleState();
 }
 
 class FlightExampleState extends State<FlightExample> {
